@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Git Workflow
 
-After completing each unit of work, create a corresponding Git commit so changes can be tracked and rolled back later. Remote: https://github.com/yumestk/TMTClock.git (branch: main).
+After completing each step of work: create a Git commit with a well-written English message, push it to the remote (https://github.com/yumestk/TMTClock.git, branch: main), then pause and summarize what the step accomplished before continuing.
 
 ## Engineering Principles
 
