@@ -16,7 +16,12 @@ func New(s *store.Store) *http.ServeMux {
 	mux := http.NewServeMux()
 	registerActivityRoutes(mux, s)
 	registerProjectRoutes(mux, s)
+	registerSessionRoutes(mux, s)
 	return mux
+}
+
+func isNotFound(err error) bool {
+	return errors.Is(err, store.ErrNotFound)
 }
 
 func writeJSON(w http.ResponseWriter, code int, v any) {
