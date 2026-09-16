@@ -15,6 +15,7 @@ import (
 func New(s *store.Store) *http.ServeMux {
 	mux := http.NewServeMux()
 	registerActivityRoutes(mux, s)
+	registerProjectRoutes(mux, s)
 	return mux
 }
 
