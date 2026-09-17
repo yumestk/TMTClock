@@ -1,0 +1,188 @@
+:root {
+  --bg: #f7f5f2;
+  --card: #ffffff;
+  --ink: #2b2723;
+  --muted: #8a8178;
+  --accent: #d94f30;
+  --accent-soft: #fbe9e3;
+  --line: #e7e2db;
+  --ok: #3f8f5f;
+  --radius: 12px;
+  font-family: -apple-system, 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1d1a17;
+    --card: #282420;
+    --ink: #eee8e1;
+    --muted: #a09386;
+    --accent: #ff7a5c;
+    --accent-soft: #3a2a24;
+    --line: #3a342e;
+    --ok: #6fc796;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+.app {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 24px 16px 64px;
+}
+
+header h1 {
+  font-size: 20px;
+  letter-spacing: 0.5px;
+  margin: 8px 0 20px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.muted {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.error {
+  color: var(--accent);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+button {
+  font: inherit;
+  font-size: 13px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  padding: 10px 22px;
+}
+
+input {
+  font: inherit;
+  font-size: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+
+input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+
+input.narrow {
+  width: 110px;
+}
+
+/* ---- manage panel ---- */
+
+.manage {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+}
+
+.manage-toggle {
+  border: none;
+  background: none;
+  color: var(--muted);
+  padding: 0;
+  font-size: 14px;
+}
+
+.manage.open {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.manage-add {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.manage-add input:first-child {
+  flex: 1;
+  min-width: 160px;
+}
+
+.manage-add.sub {
+  padding-left: 12px;
+}
+
+.manage-activity {
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.manage-activity-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.manage-activity-head strong {
+  font-size: 15px;
+}
+
+.manage-project {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 12px;
+}
+
+.manage-project > span:first-child {
+  flex: 0 0 auto;
+}
+
+.manage-project .muted {
+  flex: 1;
+}
+
+.manage-project.editing {
+  flex-wrap: wrap;
+}
+
+.manage-actions {
+  display: flex;
+  gap: 6px;
+}

@@ -1,5 +1,5 @@
 # Binaries / build output
-/dist/
+/frontend/dist/
 /tmtclock
 *.exe
 

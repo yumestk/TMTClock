@@ -36,6 +36,10 @@ func TestActivityCRUD(t *testing.T) {
 	if len(acts) != 1 || acts[0].Name != "学习" {
 		t.Fatalf("unexpected list: %+v", acts)
 	}
+	// Projects must serialize as [], never null (frontend reads .length).
+	if acts[0].Projects == nil {
+		t.Fatal("Projects must be an empty slice, not nil")
+	}
 
 	if err := s.RenameActivity(ctx, a.ID, "工作"); err != nil {
 		t.Fatalf("rename: %v", err)

@@ -60,6 +60,9 @@ func (s *Store) ListActivities(ctx context.Context) ([]Activity, error) {
 
 	for i := range acts {
 		acts[i].Projects = byAct[acts[i].ID]
+		if acts[i].Projects == nil {
+			acts[i].Projects = []Project{}
+		}
 	}
 	return acts, nil
 }
@@ -78,7 +81,7 @@ func (s *Store) CreateActivity(ctx context.Context, name string) (Activity, erro
 	if err != nil {
 		return Activity{}, err
 	}
-	return Activity{ID: id, Name: name}, nil
+	return Activity{ID: id, Name: name, Projects: []Project{}}, nil
 }
 
 // RenameActivity updates an activity's name.

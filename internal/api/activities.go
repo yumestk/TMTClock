@@ -40,7 +40,6 @@ func registerActivityRoutes(mux *http.ServeMux, s *store.Store) {
 			apiErr(w, http.StatusInternalServerError, "create activity: %v", err)
 			return
 		}
-		a.Projects = []store.Project{}
 		writeJSON(w, http.StatusCreated, a)
 	})
 
@@ -74,7 +73,6 @@ func registerActivityRoutes(mux *http.ServeMux, s *store.Store) {
 		}
 		writeJSON(w, http.StatusOK, store.Activity{ID: id, Name: body.Name, Projects: []store.Project{}})
 	})
-
 	mux.HandleFunc("DELETE /api/activities/{id}", func(w http.ResponseWriter, r *http.Request) {
 		id, ok := pathID(r)
 		if !ok {
