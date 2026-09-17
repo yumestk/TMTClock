@@ -3,6 +3,7 @@ import type { Activity, Session } from './types'
 import * as api from './api'
 import { useElapsed } from './useElapsed'
 import { formatElapsed } from './format'
+import { primeReminder } from './reminder'
 
 interface Props {
   activities: Activity[]
@@ -35,6 +36,9 @@ function IdleCard({ activities, onStarted }: { activities: Activity[]; onStarted
 
   const onStart = async () => {
     if (!selected) return
+    // Inside the click gesture: unlock audio (autoplay policy) and ask for
+    // notification permission before any reminder could be due.
+    primeReminder(parseMinutes(expectedValue) > 0)
     setBusy(true)
     setError('')
     try {
