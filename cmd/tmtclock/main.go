@@ -4,6 +4,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -11,6 +12,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/yumestk/TMTClock/frontend"
 	"github.com/yumestk/TMTClock/internal/api"
 	"github.com/yumestk/TMTClock/internal/store"
 )
@@ -30,10 +32,17 @@ func main() {
 	}
 	defer s.Close()
 
+	mux := api.New(s)
+	dist, err := fs.Sub(frontend.Dist, "dist")
+	if err != nil {
+		log.Fatalf("embed dist: %v", err)
+	}
+	mux.Handle("GET /", http.FileServerFS(dist))
+
 	url := "http://" + *addr
 	srv := &http.Server{
 		Addr:              *addr,
-		Handler:           api.New(s),
+		Handler:           mux,
 		ReadHeaderTimeout: 5 * time.Second,
 	}
 	fmt.Printf("ToMaToClock listening on %s (db: %s)\n", url, *dbPath)

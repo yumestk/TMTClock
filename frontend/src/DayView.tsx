@@ -1,14 +1,13 @@
-import type { Session, Today } from './types'
+import type { Today } from './types'
 import { fmtDuration, fmtHM, formatElapsed } from './format'
 
 interface Props {
   today: Today | null
-  running: Session | null
   runningElapsed: number
   onRefresh: () => void
 }
 
-export default function DayView({ today, running, runningElapsed, onRefresh }: Props) {
+export default function DayView({ today, runningElapsed, onRefresh }: Props) {
   const sessions = today?.sessions ?? []
 
   // Total counts every session that started today: finished ones use their
@@ -53,7 +52,7 @@ export default function DayView({ today, running, runningElapsed, onRefresh }: P
   )
 }
 
-function DayRow({ session, liveElapsed, maxSec }: { session: Session; liveElapsed: number | null; maxSec: number }) {
+function DayRow({ session, liveElapsed, maxSec }: { session: Today['sessions'][number]; liveElapsed: number | null; maxSec: number }) {
   const sec = liveElapsed ?? (Date.parse(session.end_at!) - Date.parse(session.start_at)) / 1000
   const expectedSec = session.expected_minutes * 60
   // 2% floor keeps short sessions visible on the proportional bar.

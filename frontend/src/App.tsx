@@ -79,7 +79,6 @@ export default function App() {
         />
         <DayView
           today={today}
-          running={running}
           runningElapsed={runningElapsed}
           onRefresh={refetchToday}
         />
