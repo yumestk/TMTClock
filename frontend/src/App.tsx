@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { Activity, Session } from './types'
+import type { Activity, Session, Today } from './types'
 import * as api from './api'
 import ManagePanel from './ManagePanel'
 import TimerCard from './TimerCard'
+import DayView from './DayView'
+import { useElapsed } from './useElapsed'
 
 export default function App() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [running, setRunning] = useState<Session | null>(null)
+  const [today, setToday] = useState<Today | null>(null)
   const [loadError, setLoadError] = useState('')
 
   const refetchActivities = useCallback(() => {
@@ -17,10 +20,18 @@ export default function App() {
     api.getRunning().then(setRunning).catch((e) => setLoadError(String(e)))
   }, [])
 
+  const refetchToday = useCallback(() => {
+    api.getToday().then(setToday).catch((e) => setLoadError(String(e)))
+  }, [])
+
   useEffect(() => {
     refetchActivities()
     refetchRunning()
-  }, [refetchActivities, refetchRunning])
+    refetchToday()
+  }, [refetchActivities, refetchRunning, refetchToday])
+
+  // One shared tick drives both the timer card and the live day-view row.
+  const runningElapsed = useElapsed(running?.start_at ?? null)
 
   return (
     <div className="app">
@@ -32,10 +43,21 @@ export default function App() {
         <TimerCard
           activities={activities}
           running={running}
-          onStarted={setRunning}
-          onStopped={refetchRunning}
+          onStarted={(s) => {
+            setRunning(s)
+            refetchToday()
+          }}
+          onStopped={() => {
+            refetchRunning()
+            refetchToday()
+          }}
         />
-        {/* DayView arrives in step 6. */}
+        <DayView
+          today={today}
+          running={running}
+          runningElapsed={runningElapsed}
+          onRefresh={refetchToday}
+        />
         <ManagePanel activities={activities} onChanged={refetchActivities} />
       </main>
     </div>
