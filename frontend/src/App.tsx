@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import type { Activity, Session } from './types'
 import * as api from './api'
 import ManagePanel from './ManagePanel'
+import TimerCard from './TimerCard'
 
 export default function App() {
   const [activities, setActivities] = useState<Activity[]>([])
@@ -28,12 +29,13 @@ export default function App() {
       </header>
       {loadError && <p className="error">{loadError}（后端在跑吗？make dev-go）</p>}
       <main>
-        {/* TimerCard and DayView arrive in steps 5 and 6. */}
-        {running ? (
-          <p className="muted">计时进行中：{running.activity} / {running.project}（计时卡片即将上线）</p>
-        ) : (
-          <p className="muted">空闲中。先在下方管理面板建一个分类和项目。</p>
-        )}
+        <TimerCard
+          activities={activities}
+          running={running}
+          onStarted={setRunning}
+          onStopped={refetchRunning}
+        />
+        {/* DayView arrives in step 6. */}
         <ManagePanel activities={activities} onChanged={refetchActivities} />
       </main>
     </div>
