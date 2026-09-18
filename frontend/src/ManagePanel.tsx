@@ -1,36 +1,41 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Activity } from './types'
 import * as api from './api'
 
 interface Props {
   activities: Activity[]
+  open: boolean
+  onClose: () => void
   onChanged: () => void
 }
 
-export default function ManagePanel({ activities, onChanged }: Props) {
-  const [open, setOpen] = useState(false)
-  const projectCount = activities.reduce((n, a) => n + a.projects.length, 0)
+export default function ManagePanel({ activities, open, onClose, onChanged }: Props) {
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [open, onClose])
 
-  if (!open) {
-    return (
-      <section className="manage">
-        <button className="manage-toggle" onClick={() => setOpen(true)}>
-          管理 · {activities.length} 分类 · {projectCount} 项目
-        </button>
-      </section>
-    )
-  }
+  if (!open) return null
 
   return (
-    <section className="manage open">
-      <button className="manage-toggle" onClick={() => setOpen(false)}>
-        收起管理
-      </button>
-      <AddActivityForm onAdded={onChanged} />
-      {activities.map((a) => (
-        <ActivityRow key={a.id} activity={a} onChanged={onChanged} />
-      ))}
-    </section>
+    <div className="dialog-backdrop" onClick={onClose}>
+      <section className="dialog" onClick={(e) => e.stopPropagation()}>
+        <div className="dialog-head">
+          <h2>
+            管理<span className="jp-label">かんり</span>
+          </h2>
+          <button className="dialog-close" onClick={onClose} aria-label="关闭">
+            ×
+          </button>
+        </div>
+        <AddActivityForm onAdded={onChanged} />
+        {activities.map((a) => (
+          <ActivityRow key={a.id} activity={a} onChanged={onChanged} />
+        ))}
+      </section>
+    </div>
   )
 }
 

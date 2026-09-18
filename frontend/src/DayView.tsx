@@ -4,10 +4,9 @@ import { fmtDuration, fmtHM, formatElapsed } from './format'
 interface Props {
   today: Today | null
   runningElapsed: number
-  onRefresh: () => void
 }
 
-export default function DayView({ today, runningElapsed, onRefresh }: Props) {
+export default function DayView({ today, runningElapsed }: Props) {
   const sessions = today?.sessions ?? []
 
   // Total counts every session that started today: finished ones use their
@@ -26,7 +25,9 @@ export default function DayView({ today, runningElapsed, onRefresh }: Props) {
 
   return (
     <section className="card day">
-      <h2>今日</h2>
+      <h2>
+        今日<span className="jp-label">きょうのきろく</span>
+      </h2>
       {sessions.length === 0 ? (
         <p className="muted">今天还没有记录。</p>
       ) : (
@@ -45,9 +46,6 @@ export default function DayView({ today, runningElapsed, onRefresh }: Props) {
         <span>今日合计</span>
         <strong>{sessions.length > 0 ? fmtDuration(totalSec) : '0 分钟'}</strong>
       </footer>
-      <button className="day-refresh" onClick={onRefresh}>
-        刷新
-      </button>
     </section>
   )
 }

@@ -7,11 +7,24 @@ import DayView from './DayView'
 import { useElapsed } from './useElapsed'
 import { chime, notifyOver } from './reminder'
 
+function GearIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden>
+      <circle cx="12" cy="12" r="3.2" />
+      <path
+        d="M12 2.8v2.4M12 18.8v2.4M4.6 6.9l1.7 1M17.7 16.1l1.7 1M4.6 17.1l1.7-1M17.7 7.9l1.7-1M21.2 12h-2.4M5.2 12H2.8"
+        strokeLinecap="round"
+      />
+    </svg>
+  )
+}
+
 export default function App() {
   const [activities, setActivities] = useState<Activity[]>([])
   const [running, setRunning] = useState<Session | null>(null)
   const [today, setToday] = useState<Today | null>(null)
   const [loadError, setLoadError] = useState('')
+  const [manageOpen, setManageOpen] = useState(false)
 
   const refetchActivities = useCallback(() => {
     api.listActivities().then(setActivities).catch((e) => setLoadError(String(e)))
@@ -60,8 +73,13 @@ export default function App() {
 
   return (
     <div className="app">
-      <header>
-        <h1>ToMaToClock</h1>
+      <header className="app-header">
+        <h1>
+          ToMaTo<span>Clock</span>
+        </h1>
+        <button className="gear" onClick={() => setManageOpen(true)} aria-label="管理">
+          <GearIcon />
+        </button>
       </header>
       {loadError && <p className="error">{loadError}（后端在跑吗？make dev-go）</p>}
       <main>
@@ -77,13 +95,14 @@ export default function App() {
             refetchToday()
           }}
         />
-        <DayView
-          today={today}
-          runningElapsed={runningElapsed}
-          onRefresh={refetchToday}
-        />
-        <ManagePanel activities={activities} onChanged={refetchActivities} />
+        <DayView today={today} runningElapsed={runningElapsed} />
       </main>
+      <ManagePanel
+        activities={activities}
+        open={manageOpen}
+        onClose={() => setManageOpen(false)}
+        onChanged={refetchActivities}
+      />
     </div>
   )
 }
